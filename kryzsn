@@ -1,0 +1,31 @@
+-- LocalScript
+local OLD_ID = "7658055825"
+local NEW_TEXTURE = "https://raw.githubusercontent.com/H4rb0r-rbx/Fleasion-pearlscent-textures/main/fcc06bbf-0829-4e29-80ac-661bcbb57a22-removebg-preview.png"
+
+local function replaceTexture(obj)
+    for _, property in ipairs({"Texture", "TextureID"}) do
+        local success, value = pcall(function()
+            return obj[property]
+        end)
+
+        if success and typeof(value) == "string"
+            and value:find(OLD_ID, 1, true) then
+            pcall(function()
+                obj[property] = NEW_TEXTURE
+            end)
+        end
+    end
+end
+
+local function scan(container)
+    for _, obj in ipairs(container:GetDescendants()) do
+        replaceTexture(obj)
+    end
+end
+
+scan(game:GetService("Workspace"))
+
+game:GetService("Workspace").DescendantAdded:Connect(function(obj)
+    task.wait()
+    replaceTexture(obj)
+end)
